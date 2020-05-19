@@ -22,7 +22,7 @@
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5996.xml">
 ]>
 
-<rfc obsoletes="1226" docName='draft-learmonth-rfc1226-bis-02' ipr="trust200902" submissionType="IRTF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
+<rfc obsoletes="1226" docName='draft-learmonth-rfc1226-bis-03' ipr="trust200902" submissionType="IRTF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
 <front>
 
 <title abbrev='AX.25 over IP'>
@@ -67,7 +67,7 @@ version 4 and version 6 packets. Obsoletes RFC1226.
         <t>
                 This document describes a method for the encapsulation of
                 AX.25 Link Access Protocol for Amateur Packet Radio
-                <xref target="AX.25"/>) frames within IPv4 and
+                <xref target="AX.25"/> frames within IPv4 and
                 IPv6 packets. It obsoletes
                 <xref target="RFC1226" />.
 	</t>
