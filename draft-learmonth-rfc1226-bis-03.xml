@@ -8,14 +8,14 @@
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC2409 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2409.xml">
+<!ENTITY RFC2410 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2410.xml">
 <!ENTITY RFC2474 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2474.xml">
 <!ENTITY RFC2597 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2597.xml">
 <!ENTITY RFC4301 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4301.xml">
-<!ENTITY RFC4302 SYSTEM
-  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4302.xml">
 <!ENTITY RFC4303 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4303.xml">
 <!ENTITY RFC5996 SYSTEM
@@ -49,8 +49,8 @@ Internet Protocol Encapsulation of AX.25 Frames
 
 <abstract>
 <t>This document describes a method for the encapsulation of AX.25
-Link Access Protocol for Amateur Packet Radio frames within IP
-version 4 and version 6 packets. Obsoletes RFC1226.
+Link Access Protocol for Amateur Packet Radio frames within IPv4 and IPv6
+packets. Obsoletes RFC1226.
 </t>
 </abstract>
 
@@ -95,8 +95,9 @@ in this document are to be interpreted as described in
 
 <section anchor="ip-encap" title="Internet Protocol Encapsulation">
 <t>
-        Each AX.25 frame is encapsulated in one IP version 4 or version 6
-        datagram using protocol number 93 as assigned in the Assigned Internet Protocol Numbers registry <xref target="protocol-numbers"/>.
+        Each AX.25 frame is encapsulated in one IPv4 or IPv6
+        datagram using protocol number 93 as assigned in the
+	Assigned Internet Protocol Numbers registry <xref target="protocol-numbers"/>.
         For AX.25 version 2.0, the maximum frame size expected is 330 bytes and
         implementations MUST be prepared to handle frames of this size.
         Higher frame sizes can be negotiated by AX.25 version 2.2 and so this
@@ -152,15 +153,24 @@ in this document are to be interpreted as described in
 	is set (i.e. it is zero),
         the DiffServ codepoint MAY be set to AF21 <xref target="RFC2597"/>.
 </t>
+<t>XXX: Open question, perhaps precendence bit should cause use of the LE PHB.</t>
 <t>
         Again, for the avoidance of doubt: on decapsulation the AX.25 frame MUST
-        NOT be modified regardless of the DiffServ codepoint on the received
+        NOT be modified based on the DiffServ codepoint on the received
         encapsulating IP header. The receiver MUST NOT use the DiffServ
 	codepoint to infer anything about the nature of the encapsulated packet.
 	It has been shown that while AF codepoints may be remarked while
 	crossing administrative boundaries, it is unlikely that priority
 	inversion will occur, either with the BE traffic or between AF PHBs
 	due to remarking where such remarking occurs <xref target="Cust18"/>.
+</t>
+<t>
+	It is possible depending on the nature of the tunnel that decapsulated
+	packets would need to be treated as third-party traffic according to the
+	APRS specification <xref target="APRS"/>. In this case,
+        the Third-Party Network Identifier "IPENC" SHOULD be used. This is to
+	differentiate traffic using IP encapsulation from APRS-IS traffic
+	<xref target="APRS-IS"/>.
 </t>
 </section>
 </section>
@@ -190,24 +200,23 @@ in this document are to be interpreted as described in
                 originated from licensed radio amateurs. In order to provide
                 this guarantee, IPSec
                 <xref target="RFC4301"/>
-                MUST be employed to provide authentication of packets. A
+                SHOULD be employed to provide authentication of packets. A
                 transport mode SA SHOULD be negotiated between the IP
-                endpoints to use IP Authentication Headers (AH)
-                <xref target="RFC4302"/>
+                endpoints to use ESP
+                <xref target="RFC4303"/> with NULL encryption <xref target="RFC2410"/>
                 with the traffic selector matching packets with IP protocol
-                number 93. In cases where NAT traversal is required, a tunnel
-                mode SA MAY be used instead of transport. In cases where traffic
-                is guaranteed to not pass via an amateur radio link, ESP
-                <xref target="RFC4303"/>
-                MAY be used instead of AH. ESP MUST NOT be used where there is
-		the possibility that the encapsulating packet will be
-		transmitted via an amateur radio link.
+                number 93.
+                In cases where traffic
+                is guaranteed to not pass via an amateur radio link, non-NULL
+                encryption MAY be used. Non-NULL encryption MUST NOT be used
+		where there is the possibility that the encapsulating packet
+		will be transmitted via an amateur radio link.
 	</t>
         <t>
                 When transmitted by an amateur radio station, many propagation
                 modes will permit wide reception of a packet. As such, receivers
                 MUST implement anti-replay protection by verifying received
-                sequence numbers <xref target="RFC4302"/><xref target="RFC4303"/>.
+                sequence numbers <xref target="RFC4303"/>.
                 The size of the anti-replay window may need to be scaled to
                 account not only for the speed of the link, but also for packet
                 loss that may occur on amateur radio links. Following extended
@@ -242,10 +251,10 @@ in this document are to be interpreted as described in
 <back>
 <references title="Normative References">
 &RFC2119;
+&RFC2410;
 &RFC2474;
 &RFC2597;
 &RFC4301;
-&RFC4302;
 &RFC4303;
 <reference anchor="AX.25" target="https://www.tapr.org/pdf/AX25.2.2.pdf">
 <front>
@@ -280,6 +289,13 @@ in this document are to be interpreted as described in
 <title>APRS Protocol Reference</title>
 <author initials="I." surname="Wade" role="editor"><organization>APRS Working Group</organization></author>
 <date year="2000" month="August"/>
+</front>
+</reference>
+<reference anchor="APRS-IS" target="http://www.aprs-is.net/">
+<front>
+<title>APRS-IS</title>
+<author initials="P." surname="Loveall"/>
+<date/>
 </front>
 </reference>
 </references>
