@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY Cust18 SYSTEM
+  "http://xml2rfc.ietf.org/public/rfc/bibxml-doi/reference.DOI.10.1016/j.comcom.2018.05.016.xml?anchor=Cust18">
 <!ENTITY RFC1226 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1226.xml">
 <!ENTITY RFC2119 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC2409 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2409.xml">
 <!ENTITY RFC2474 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2474.xml">
 <!ENTITY RFC2597 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2597.xml">
+<!ENTITY RFC4301 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4301.xml">
+<!ENTITY RFC4302 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4302.xml">
+<!ENTITY RFC4303 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4303.xml">
+<!ENTITY RFC5996 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5996.xml">
 ]>
 
-<rfc obsoletes="1226" docName='draft-learmonth-rfc1226-bis-01' ipr="trust200902" submissionType="IRTF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
+<rfc obsoletes="1226" docName='draft-learmonth-rfc1226-bis-02' ipr="trust200902" submissionType="IRTF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
 <front>
 
 <title abbrev='AX.25 over IP'>
@@ -112,8 +124,13 @@ in this document are to be interpreted as described in
 </t>
 <t>
         For the avoidance of doubt: on decapsulation the AX.25 frame MUST NOT be
-        modified regardless of the DiffServ
-        codepoint on the received encapsulating IP header.
+        modified regardless of the DiffServ codepoint on the received
+        encapsulating IP header. The receiver MUST NOT use the DiffServ
+	codepoint to infer anything about the nature of the encapsulated packet.
+	It has been shown that while the AF21 codepoint may be remarked while
+	crossing administrative boundaries, it is unlikely that priority
+	inversion will occur due to remarking where such remarking occurs
+	<xref target="Cust18"/>.
 </t>
 </section>
 
@@ -138,7 +155,12 @@ in this document are to be interpreted as described in
 <t>
         Again, for the avoidance of doubt: on decapsulation the AX.25 frame MUST
         NOT be modified regardless of the DiffServ codepoint on the received
-        encapsulating IP header.
+        encapsulating IP header. The receiver MUST NOT use the DiffServ
+	codepoint to infer anything about the nature of the encapsulated packet.
+	It has been shown that while AF codepoints may be remarked while
+	crossing administrative boundaries, it is unlikely that priority
+	inversion will occur, either with the BE traffic or between AF PHBs
+	due to remarking where such remarking occurs <xref target="Cust18"/>.
 </t>
 </section>
 </section>
@@ -151,18 +173,60 @@ in this document are to be interpreted as described in
 </section>
 
 <section anchor="security-considerations" title="Security Considerations">
-<t>XXX Left the hard part for last, but the basics of it:
-<list>
-<t>You should use something to guarantee integrity</t>
-<t>My advice is to use IPsec</t>
-<t>Use ESP on the Internet, use AH on amateur radio links</t>
-<t>Use AH if possibility that packet will go via amateur radio</t>
-<t>Tunnels will be configured statically (can't think of other use cases) so
-certificates are good</t>
-<t>Routing via IPsec is not required, transport mode suffices, tunnel mode
-for cases where there is NAT</t>
-</list>
-</t>
+        <t>
+                With the exception of control signals exchanged between earth
+                command stations and space stations in the amateur-satellite
+                service, amateur radio transmissions cannot be encoded for the
+                purpose of obscuring their meaning. In essence, this means that
+                cryptography that requires the use of secrets to decipher a
+                message cannot be used where the possibility exists that a
+                packet will be transmitted by an amateur radio station.
+        </t>
+        <t>
+                The CRC-16-CCITT provides for an integrity check but does not
+                guarantee the authenticity of the packet. In many jurisdictions
+                it is a requirement for amateur radio stations that are Internet
+                connected that they verify that packets for transmission have
+                originated from licensed radio amateurs. In order to provide
+                this guarantee, IPSec
+                <xref target="RFC4301"/>
+                MUST be employed to provide authentication of packets. A
+                transport mode SA SHOULD be negotiated between the IP
+                endpoints to use IP Authentication Headers (AH)
+                <xref target="RFC4302"/>
+                with the traffic selector matching packets with IP protocol
+                number 93. In cases where NAT traversal is required, a tunnel
+                mode SA MAY be used instead of transport. In cases where traffic
+                is guaranteed to not pass via an amateur radio link, ESP
+                <xref target="RFC4303"/>
+                MAY be used instead of AH. ESP MUST NOT be used where there is
+		the possibility that the encapsulating packet will be
+		transmitted via an amateur radio link.
+	</t>
+        <t>
+                When transmitted by an amateur radio station, many propagation
+                modes will permit wide reception of a packet. As such, receivers
+                MUST implement anti-replay protection by verifying received
+                sequence numbers <xref target="RFC4302"/><xref target="RFC4303"/>.
+                The size of the anti-replay window may need to be scaled to
+                account not only for the speed of the link, but also for packet
+                loss that may occur on amateur radio links. Following extended
+                packet loss a sender may have advanced the sequence number
+                beyond the window size allowed. Dead peer detection
+                <xref target="RFC5996"/>
+                can be used to renegotiate SAs in this case and so SHOULD be
+                enabled for any SA expected to traverse an amateur radio
+                link that is expected to have varying propagation
+                charachteristics.
+        </t>
+	<t>
+		Given the need for anti-replay protection, it is not possible
+		to manually key the SAs. An automatic keying protocol such as
+		IKEv1 <xref target="RFC2409"/> or IKEv2 <xref target="RFC5996"/>
+		MUST be used to establish SAs. The exact details
+		of the automatic keying protocol to use and its paramaters are
+		not specified in this document.
+	</t>
 </section>
 
 <section anchor="acknowledgements" title="Acknowledgements">
@@ -180,6 +244,9 @@ for cases where there is NAT</t>
 &RFC2119;
 &RFC2474;
 &RFC2597;
+&RFC4301;
+&RFC4302;
+&RFC4303;
 <reference anchor="AX.25" target="https://www.tapr.org/pdf/AX25.2.2.pdf">
 <front>
 <title>AX.25 Link Access Protocol for Amateur Packet Radio Version 2.2</title>
@@ -204,7 +271,10 @@ for cases where there is NAT</t>
 </references>
 
 <references title="Informative References">
+&Cust18;
 &RFC1226;
+&RFC2409;
+&RFC5996;
 <reference anchor="APRS" target="http://www.aprs.org/doc/APRS101.PDF">
 <front>
 <title>APRS Protocol Reference</title>
