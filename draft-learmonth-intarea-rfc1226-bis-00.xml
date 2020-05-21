@@ -6,8 +6,6 @@
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1226.xml">
 <!ENTITY RFC2119 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY RFC2409 SYSTEM
-  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2409.xml">
 <!ENTITY RFC2410 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2410.xml">
 <!ENTITY RFC2474 SYSTEM
@@ -18,8 +16,8 @@
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4301.xml">
 <!ENTITY RFC4303 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4303.xml">
-<!ENTITY RFC5996 SYSTEM
-  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5996.xml">
+<!ENTITY RFC7926 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7926.xml">
 ]>
 
 <rfc obsoletes="1226" docName='draft-learmonth-intarea-rfc1226-bis-00' ipr="trust200902" submissionType="IETF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
@@ -224,7 +222,7 @@ in this document are to be interpreted as described in
                 loss that may occur on amateur radio links. Following extended
                 packet loss a sender may have advanced the sequence number
                 beyond the window size allowed. Dead peer detection
-                <xref target="RFC5996"/>
+                <xref target="RFC7926"/>
                 can be used to renegotiate SAs in this case and so SHOULD be
                 enabled for any SA expected to traverse an amateur radio
                 link that is expected to have varying propagation
@@ -232,11 +230,10 @@ in this document are to be interpreted as described in
         </t>
 	<t>
 		Given the need for anti-replay protection, it is not possible
-		to manually key the SAs. An automatic keying protocol such as
-		IKEv1 <xref target="RFC2409"/> or IKEv2 <xref target="RFC5996"/>
-		MUST be used to establish SAs. The exact details
-		of the automatic keying protocol to use and its paramaters are
-		not specified in this document.
+		to manually key the SAs. IKEv2 <xref target="RFC7926"/>
+		SHOULD be used to establish SAs. Beyond the above, the exact
+		details of the automatic keying protocol to use and its
+		paramaters are not specified in this document.
 	</t>
 </section>
 
@@ -284,8 +281,7 @@ in this document are to be interpreted as described in
 <references title="Informative References">
 &Cust18;
 &RFC1226;
-&RFC2409;
-&RFC5996;
+&RFC7926;
 <reference anchor="APRS" target="http://www.aprs.org/doc/APRS101.PDF">
 <front>
 <title>APRS Protocol Reference</title>
