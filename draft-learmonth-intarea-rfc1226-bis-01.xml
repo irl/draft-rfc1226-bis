@@ -16,11 +16,11 @@
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4301.xml">
 <!ENTITY RFC4303 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4303.xml">
-<!ENTITY RFC7926 SYSTEM
-  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7926.xml">
+<!ENTITY RFC7296 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7296.xml">
 ]>
 
-<rfc obsoletes="1226" docName='draft-learmonth-intarea-rfc1226-bis-00' ipr="trust200902" submissionType="IETF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
+<rfc obsoletes="1226" docName='draft-learmonth-intarea-rfc1226-bis-01' ipr="trust200902" submissionType="IETF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
 <front>
 
 <title abbrev='AX.25 over IP'>
@@ -175,13 +175,6 @@ in this document are to be interpreted as described in
 </section>
 </section>
 
-<section anchor="iana-considerations" title="IANA Considerations">
-<t>
-	Protocol number 93 is assigned in <xref target="protocol-numbers"></xref> and
-	should be updated to point to this document.
-</t>
-</section>
-
 <section anchor="security-considerations" title="Security Considerations">
         <t>
                 With the exception of control signals exchanged between earth
@@ -190,27 +183,40 @@ in this document are to be interpreted as described in
                 purpose of obscuring their meaning. In essence, this means that
                 cryptography that requires the use of secrets to decipher a
                 message cannot be used where the possibility exists that a
-                packet will be transmitted by an amateur radio station.
+                packet will be transmitted by an amateur radio station <xref target="Part97.113"/><xref target="OfcomTerms"/>.
         </t>
         <t>
                 The CRC-16-CCITT provides for an integrity check but does not
                 guarantee the authenticity of the packet. In many jurisdictions
                 it is a requirement for amateur radio stations that are Internet
                 connected that they verify that packets for transmission have
-                originated from licensed radio amateurs. In order to provide
+                originated from licensed radio amateurs <xref target="Part97.111"/><xref target="OfcomTerms"/>.
+</t>
+<t>
+		In order to provide
                 this guarantee, IPSec
                 <xref target="RFC4301"/>
-                SHOULD be employed to provide authentication of packets. A
-                transport mode SA SHOULD be negotiated between the IP
-                endpoints to use ESP
-                <xref target="RFC4303"/> with NULL encryption <xref target="RFC2410"/>
-                with the traffic selector matching packets with IP protocol
+                SHOULD be employed to provide authentication of packets. The
+                neogtiated SA SHOULD use transport mode with ESP
+                <xref target="RFC4303"/> to limit the packet size overhead
+                incurred by use of IPSec.
+                The traffic selector MUST match packets with IP protocol
                 number 93.
-                In cases where traffic
-                is guaranteed to not pass via an amateur radio link, non-NULL
-                encryption MAY be used. Non-NULL encryption MUST NOT be used
-		where there is the possibility that the encapsulating packet
-		will be transmitted via an amateur radio link.
+                An authentication algorithm MUST be selected to provide
+                data origin authentication.
+         </t>
+         <t>
+                The encryption algorithm MUST NOT
+                provide confidentiality for tunnels that will traverse an
+                amateur radio link
+                (i.e. the encapsulated packets will be transmitted by an
+                amateur radio station). The use of the NULL algorithm
+                <xref target="RFC2410"/> is RECOMMENDED for tunnels that will
+                traverse an amateur radio link.
+                In cases where traffic can be known or reasonably expected to
+                not traverse
+                an amateur radio link, an encryption algorithm that provides
+                confidentiality is RECOMMENDED.
 	</t>
         <t>
                 When transmitted by an amateur radio station, many propagation
@@ -222,7 +228,7 @@ in this document are to be interpreted as described in
                 loss that may occur on amateur radio links. Following extended
                 packet loss a sender may have advanced the sequence number
                 beyond the window size allowed. Dead peer detection
-                <xref target="RFC7926"/>
+                <xref target="RFC7296"/>
                 can be used to renegotiate SAs in this case and so SHOULD be
                 enabled for any SA expected to traverse an amateur radio
                 link that is expected to have varying propagation
@@ -230,11 +236,18 @@ in this document are to be interpreted as described in
         </t>
 	<t>
 		Given the need for anti-replay protection, it is not possible
-		to manually key the SAs. IKEv2 <xref target="RFC7926"/>
+		to manually key the SAs. IKEv2 <xref target="RFC7296"/>
 		SHOULD be used to establish SAs. Beyond the above, the exact
 		details of the automatic keying protocol to use and its
 		paramaters are not specified in this document.
 	</t>
+</section>
+
+<section anchor="iana-considerations" title="IANA Considerations">
+<t>
+	Protocol number 93 is assigned in <xref target="protocol-numbers"></xref> and
+	should be updated to point to this document.
+</t>
 </section>
 
 <section anchor="acknowledgements" title="Acknowledgements">
@@ -281,7 +294,7 @@ in this document are to be interpreted as described in
 <references title="Informative References">
 &Cust18;
 &RFC1226;
-&RFC7926;
+&RFC7296;
 <reference anchor="APRS" target="http://www.aprs.org/doc/APRS101.PDF">
 <front>
 <title>APRS Protocol Reference</title>
@@ -296,8 +309,28 @@ in this document are to be interpreted as described in
 <date/>
 </front>
 </reference>
+<reference anchor="Part97.111" target="https://www.ecfr.gov/cgi-bin/text-idx?node=pt47.5.97&amp;rgn=div5#se47.5.97_1111">
+<front>
+<title>Electronic Code of Federal Regulations Title 47, Part 97.111 - Authorized transmissions</title>
+<author><organization>e-CFR</organization></author>
+<date/>
+</front>
+</reference>
+<reference anchor="Part97.113" target="https://www.ecfr.gov/cgi-bin/text-idx?node=pt47.5.97&amp;rgn=div5#se47.5.97_1113">
+<front>
+<title>Electronic Code of Federal Regulations Title 47, Part 97.113 - Prohibited transmissions</title>
+<author><organization>e-CFR</organization></author>
+<date/>
+</front>
+</reference>
+<reference anchor="OfcomTerms" target="https://www.ofcom.org.uk/__data/assets/pdf_file/0027/62991/amateur-terms.pdf">
+<front>
+<title>UK Amateur Radio Licence Section 2</title>
+<author><organization>Ofcom</organization></author>
+<date/>
+</front>
+</reference>
 </references>
-
 </back>
 
 </rfc>

@@ -1,5 +1,5 @@
 all:
-	xml2rfc --legacy --text draft-learmonth-intarea-rfc1226-bis-00.xml
+	xml2rfc --text draft-learmonth-intarea-rfc1226-bis-01.xml
 
 clean:
 	rm *.txt
