@@ -16,11 +16,13 @@
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4301.xml">
 <!ENTITY RFC4303 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4303.xml">
+<!ENTITY RFC5840 SYSTEM
+  "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5840.xml">
 <!ENTITY RFC7296 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7296.xml">
 ]>
 
-<rfc obsoletes="1226" docName='draft-learmonth-intarea-rfc1226-bis-01' ipr="trust200902" submissionType="IETF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
+<rfc obsoletes="1226" docName='draft-learmonth-intarea-rfc1226-bis-02' ipr="trust200902" submissionType="IETF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
 <front>
 
 <title abbrev='AX.25 over IP'>
@@ -218,6 +220,11 @@ in this document are to be interpreted as described in
                 an amateur radio link, an encryption algorithm that provides
                 confidentiality is RECOMMENDED.
 	</t>
+	<t>
+		Wrapped ESP <xref target="RFC5840"/> MAY be used to explicitly
+		indicate where "integrity-only" security is provided without
+		data confidentiality.
+	</t>
         <t>
                 When transmitted by an amateur radio station, many propagation
                 modes will permit wide reception of a packet. As such, receivers
@@ -268,6 +275,7 @@ in this document are to be interpreted as described in
 &RFC2597;
 &RFC4301;
 &RFC4303;
+&RFC5840;
 <reference anchor="AX.25" target="https://www.tapr.org/pdf/AX25.2.2.pdf">
 <front>
 <title>AX.25 Link Access Protocol for Amateur Packet Radio Version 2.2</title>
