@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!ENTITY Cust18 SYSTEM
-  "http://xml2rfc.ietf.org/public/rfc/bibxml-doi/reference.DOI.10.1016/j.comcom.2018.05.016.xml?anchor=Cust18">
+<!ENTITY CUST18 SYSTEM
+  "http://xml2rfc.ietf.org/public/rfc/bibxml-doi/reference.DOI.10.1016/j.comcom.2018.05.016.xml?anchor=CUST18">
 <!ENTITY RFC1226 SYSTEM
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1226.xml">
 <!ENTITY RFC2119 SYSTEM
@@ -22,7 +22,7 @@
   "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7296.xml">
 ]>
 
-<rfc obsoletes="1226" docName='draft-learmonth-intarea-rfc1226-bis-02' ipr="trust200902" submissionType="IETF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
+<rfc obsoletes="1226" docName='draft-learmonth-intarea-rfc1226-bis-03' ipr="trust200902" submissionType="IETF" category="exp" xml:lang="en"><!-- xmlns:xi="http://www.w3.org/2001/XInclude"-->
 <front>
 
 <title abbrev='AX.25 over IP'>
@@ -131,7 +131,7 @@ in this document are to be interpreted as described in
 	It has been shown that while the AF21 codepoint may be remarked while
 	crossing administrative boundaries, it is unlikely that priority
 	inversion will occur due to remarking where such remarking occurs
-	<xref target="Cust18"/>.
+	<xref target="CUST18"/>.
 </t>
 </section>
 
@@ -164,7 +164,7 @@ in this document are to be interpreted as described in
 	It has been shown that while AF codepoints may be remarked while
 	crossing administrative boundaries, it is unlikely that priority
 	inversion will occur, either with the BE traffic or between AF PHBs
-	due to remarking where such remarking occurs <xref target="Cust18"/>.
+	due to remarking where such remarking occurs <xref target="CUST18"/>.
 </t>
 <t>
 	It is possible depending on the nature of the tunnel that decapsulated
@@ -300,7 +300,7 @@ in this document are to be interpreted as described in
 </references>
 
 <references title="Informative References">
-&Cust18;
+&CUST18;
 &RFC1226;
 &RFC7296;
 <reference anchor="APRS" target="http://www.aprs.org/doc/APRS101.PDF">
